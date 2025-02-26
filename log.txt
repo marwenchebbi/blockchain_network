@@ -1,0 +1,73 @@
+2025-02-26 19:22:56  main INFO openethereum::run  Starting OpenEthereum/v3.3.0-rc.8-stable-d8305c52e-20210903/x86_64-windows-msvc/rustc1.52.1
+2025-02-26 19:22:56  main INFO openethereum::run  Keys path C:\Users\pc\AppData\Roaming\OpenEthereum\keys\Development
+2025-02-26 19:22:56  main INFO openethereum::run  DB path C:\Users\pc\AppData\Local\OpenEthereum\chains\Development\db\8cd2908f686e8952
+2025-02-26 19:22:56  main INFO openethereum::run  State DB configuration: fast
+2025-02-26 19:22:56  main INFO openethereum::run  Operating mode: active
+2025-02-26 19:22:56  main INFO ethcore_service::service  Configured for Development using InstantSeal engine
+2025-02-26 19:22:56  main INFO parity_ws  Listening for new connections on 127.0.0.1:8546.
+2025-02-26 19:22:56  main WARN jsonrpc_http_server  Multi-threaded server is not available on Windows. Falling back to single thread.
+2025-02-26 19:22:56  Worker devp2p1 INFO network  Public node URL: enode://d441b7bb51218c95d09f9a798a50924d1439df36c464d7f866bceae0342ae316591fb2272792d47f1d1185da18b3e7b77b711c906480e04b9da13e9845f94d2f@127.0.0.1:30303
+2025-02-26 19:23:12  http.worker00 WARN rpc  eth_accounts is deprecated and will be removed in future versions: Account management is being phased out see #9997 for alternatives.
+2025-02-26 19:23:12  http.worker00 WARN rpc  eth_sendTransaction is deprecated and will be removed in future versions: Account management is being phased out see #9997 for alternatives.
+2025-02-26 19:23:12  http.worker00 INFO import  Imported #8 0xba4f…e5fe (1 txs, 8.00 Mgas, 0 ms, 6.33 KiB)
+2025-02-26 19:23:12  Worker Client3 INFO own_tx  Transaction mined (hash 0x58c694f32d1efe8e00a336717c2ed14416e8e2acc68a60f36634c9eed6364479)
+2025-02-26 19:23:26  Worker Client3 INFO import    0/25 peers     50 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   65 µs
+2025-02-26 19:23:56  Worker Client3 INFO import    0/25 peers     50 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   65 µs
+2025-02-26 19:24:26  Worker Client0 INFO import    0/25 peers     50 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   65 µs
+2025-02-26 19:24:56  Worker Client2 INFO import    0/25 peers     50 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   65 µs
+2025-02-26 19:25:26  Worker Client1 INFO import    0/25 peers     50 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   65 µs
+2025-02-26 19:25:56  Worker Client0 INFO import    0/25 peers     50 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   65 µs
+2025-02-26 19:26:26  Worker Client1 INFO import    0/25 peers     50 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   65 µs
+2025-02-26 19:26:27  http.worker00 WARN rpc  eth_accounts is deprecated and will be removed in future versions: Account management is being phased out see #9997 for alternatives.
+2025-02-26 19:26:27  http.worker00 WARN rpc  eth_sendTransaction is deprecated and will be removed in future versions: Account management is being phased out see #9997 for alternatives.
+2025-02-26 19:26:27  Worker Client0 INFO own_tx  Transaction mined (hash 0xa9668c22d730839667511a66656c00c577f3e6b972e5fae96aeb62e56a29d1bb)
+2025-02-26 19:26:27  http.worker00 INFO import  Imported #9 0x94d5…0866 (1 txs, 1.43 Mgas, 0 ms, 5.90 KiB)
+2025-02-26 19:26:27  Worker Client2 INFO own_tx  Transaction mined (hash 0xe6ccb3ce47f293826e11a018b1ee44f30e95859db66cc3974cd4f8986965a0ce)
+2025-02-26 19:26:56  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:27:26  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:27:56  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:28:27  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:28:57  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:29:27  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:29:57  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:30:27  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:30:57  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:31:27  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:31:57  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:32:27  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:32:57  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:33:27  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:33:57  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:34:32  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:35:02  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:35:33  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:36:08  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:36:43  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:37:13  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:37:43  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:38:13  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:38:48  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:39:18  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:39:53  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:40:23  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:40:58  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:41:28  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:41:58  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:42:28  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:42:58  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:43:28  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:43:58  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:44:33  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:45:03  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:45:33  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:45:46  http.worker00 WARN rpc  eth_accounts is deprecated and will be removed in future versions: Account management is being phased out see #9997 for alternatives.
+2025-02-26 19:46:03  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:46:33  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:47:04  Worker Client0 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   62 µs
+2025-02-26 19:47:25  http.worker00 WARN rpc  eth_accounts is deprecated and will be removed in future versions: Account management is being phased out see #9997 for alternatives.
+2025-02-26 19:47:34  Worker Client2 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   68 µs
+2025-02-26 19:48:04  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   68 µs
+2025-02-26 19:48:34  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   68 µs
+2025-02-26 19:49:04  Worker Client3 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   68 µs
+2025-02-26 19:49:34  Worker Client1 INFO import    0/25 peers     63 KiB chain  0 bytes queue  RPC:  0 conn,    0 req/s,   68 µs
+2025-02-26 19:49:46  main INFO openethereum::run  Finishing work, please wait...

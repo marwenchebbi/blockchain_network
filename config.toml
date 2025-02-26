@@ -1,0 +1,22 @@
+[parity]
+chain = "genesis.json"  
+
+[network]
+port = 30303
+
+[rpc]
+disable = false
+interface = "127.0.0.1"
+port = 8545
+cors = ["*"]
+apis = ["all"]
+hosts = ["all"]
+
+[mining]
+force_sealing = true
+reseal_on_txs = "all"
+
+[account]
+# Unlock the validator account for signing
+unlock = ["0x12b7c63e95195aa29ad3546302ffc12f760f9116"]
+password = ["./password.txt"]  
