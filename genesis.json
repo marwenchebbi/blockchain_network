@@ -1,5 +1,5 @@
 {
-  "name": "Development",
+  "name": "dev",
   "engine": {
     "instantSeal": {
       "params": {}
@@ -25,7 +25,7 @@
     "gasLimit": "0xe4e1c0"  
   },
   "accounts": {
-    "0x12b7c63e95195aa29ad3546302ffc12f760f9116": {
+    "0x3bce4892e588693dd75e822314ab101aa762fce1": {
       "balance": "0x3635c9adc5dea00000"  
     }
   }

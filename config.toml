@@ -18,5 +18,5 @@ reseal_on_txs = "all"
 
 [account]
 # Unlock the validator account for signing
-unlock = ["0x12b7c63e95195aa29ad3546302ffc12f760f9116"]
+unlock = ["0x3bce4892e588693dd75e822314ab101aa762fce1"]
 password = ["./password.txt"]  

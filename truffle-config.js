@@ -21,7 +21,7 @@
 // require('dotenv').config();
 // const mnemonic = process.env["MNEMONIC"];
 // const infuraProjectId = process.env["INFURA_PROJECT_ID"];
- 
+
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 module.exports = {
@@ -42,15 +42,16 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-     development: {
-      host: "127.0.0.1",     // Localhost (default: none)
-      port: 7545,            // Standard Ethereum port (default: none)
-      network_id: "*",  
-      //from: "0x12b7c63e95195aa29ad3546302ffc12f760f9116",
-      timeout: 60000, 
-      //gas: 400000,  // Increased from 8000000
-      //gasPrice: 0    // Any network (default: none)
-     },
+    development: {
+      host: "127.0.0.1",     // OpenEthereum dev chain runs on localhost
+      port: 7545,            // Default JSON-RPC port for OpenEthereum
+      network_id: "*",       // Match any network
+      //from: "0x3bce4892e588693dd75e822314ab101aa762fce1", // Replace with your OpenEthereum dev account
+      gas: 6721975,          // Adjust gas limit as needed
+      gasPrice: 20000000000,           // No gas price required in dev mode
+      timeoutBlocks: 50,
+      skipDryRun: true       // Avoids dry runs which are unnecessary for local dev chains
+    },
     //
     // goerli: {
     //   provider: () => new HDWalletProvider(mnemonic, `https://goerli.infura.io/v3/${infuraProjectId}`),

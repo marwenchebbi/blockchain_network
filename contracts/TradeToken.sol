@@ -1,30 +1,49 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract TradeToken {
-    ERC20 public prxToken;
-    ERC20 public usdtToken;
-    uint256 public rate = 100; // 1 PRX = 0.01 USDT
+    IERC20 public proxym;
+    IERC20 public usdt;
+    uint256 public rate = 100; // 100 PRX = 1 USDT
 
-    constructor(address _prxToken, address _usdtToken) {
-        prxToken = ERC20(_prxToken);
-        usdtToken = ERC20(_usdtToken);
+    constructor(address _proxym, address _usdt) {
+        proxym = IERC20(_proxym);
+        usdt = IERC20(_usdt);
     }
 
-    function buyPRX(uint256 usdtAmount) public {
-        uint256 prxAmount = usdtAmount * rate;
-        require(usdtToken.transferFrom(msg.sender, address(this), usdtAmount), "USDT transfer failed");
-        require(prxToken.transfer(msg.sender, prxAmount), "PRX transfer failed");
+    // Buy tokens with USDT
+    function buyTokens(uint256 usdtAmount) public {
+        uint256 tokenAmount = usdtAmount * rate;
+        require(proxym.balanceOf(address(this)) >= tokenAmount, "Not enough tokens available");
+        
+        // Transfer USDT from the user to the contract
+        usdt.transferFrom(msg.sender, address(this), usdtAmount);
+        
+        // Transfer PRX tokens to the user
+        proxym.transfer(msg.sender, tokenAmount);
     }
 
-    function sellPRX(uint256 prxAmount) public {
-        uint256 usdtAmount = prxAmount / rate;
-        require(prxToken.transferFrom(msg.sender, address(this), prxAmount), "PRX transfer failed");
-        require(usdtToken.transfer(msg.sender, usdtAmount), "USDT transfer failed");
+    // Sell tokens for USDT
+    function sellTokens(uint256 tokenAmount) public {
+        uint256 usdtAmount = tokenAmount / rate;
+        require(usdt.balanceOf(address(this)) >= usdtAmount, "Not enough USDT available");
+        
+        // Transfer PRX tokens from the user to the contract
+        proxym.transferFrom(msg.sender, address(this), tokenAmount);
+        
+        // Transfer USDT to the user
+        usdt.transfer(msg.sender, usdtAmount);
+        
     }
-
-    function getPrice() public view returns (uint256) {
-        return rate;
+    
+    // Transfer PRX tokens to another address
+    function transferToken(address from,address to, uint256 tokenAmount) public {
+        // Ensure the sender has enough tokens
+        require(proxym.balanceOf(from) >= tokenAmount, "Not enough tokens to transfer");
+        // Transfer tokens from the sender to the recipient
+        bool success = proxym.transferFrom(from, to, tokenAmount);
+        require(success, "Token transfer failed");
     }
 }
