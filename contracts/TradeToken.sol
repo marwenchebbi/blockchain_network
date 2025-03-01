@@ -14,15 +14,15 @@ contract TradeToken {
     }
 
     // Buy tokens with USDT
-    function buyTokens(uint256 usdtAmount) public {
+    function buyTokens(address from,uint256 usdtAmount) public {
         uint256 tokenAmount = usdtAmount * rate;
         require(proxym.balanceOf(address(this)) >= tokenAmount, "Not enough tokens available");
         
         // Transfer USDT from the user to the contract
-        usdt.transferFrom(msg.sender, address(this), usdtAmount);
+        usdt.transferFrom(from, address(this), usdtAmount);
         
         // Transfer PRX tokens to the user
-        proxym.transfer(msg.sender, tokenAmount);
+        proxym.transfer(from, tokenAmount);
     }
 
     // Sell tokens for USDT

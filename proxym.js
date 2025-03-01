@@ -10,7 +10,7 @@ const web3 = new Web3("http://127.0.0.1:7545");
 
 // Load tarding contract 
 const ProxymContractPath = path.join(__dirname, "build/contracts/Proxym.json");
-const ProxymContractAddress = "0xBD527DB25fE8dba990ab3CF1a093326Ec44F99E1"; // Replace with the deployed address from Truffle
+const ProxymContractAddress = "0x3b7494967E48e46fC7c4747B14c3cC607b44aEd3"; // Replace with the deployed address from Truffle
 const ProxymcontractJSON = JSON.parse(fs.readFileSync(ProxymContractPath, "utf8"));
 const ProxymcontractABI = ProxymcontractJSON.abi;
 
@@ -47,7 +47,7 @@ async function transferToken(amount, contract) {
     }
 }
 
-async function getExchangeRate(contrect) {
+async function transferToken(contrect) {
     const rate = await contract.methods.getPrice().call();
     console.log(`the exchange rate is : ${rate}`)
 }
