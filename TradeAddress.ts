@@ -1,0 +1,1 @@
+export const tradeAddress = "0x4aE117BE91c9eF312dE8f852032c1Cd3562cF328"
