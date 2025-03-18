@@ -26,7 +26,7 @@ async function logBalanceOfAllAccounts(contract) {
             const balanceUSDT = web3.utils.fromWei(balanceWei, "ether");
             console.log(`Account ${i}: ${accounts[i]} has ${balanceUSDT} USDT`);
         }
-        const balance = await contract.methods.balanceOf("0x4aE117BE91c9eF312dE8f852032c1Cd3562cF328").call();
+        const balance = await contract.methods.balanceOf("0xA577977ebcD5A63323777d50A1a467CD19d28312").call();
         const balanceUSDT = web3.utils.fromWei(balance, "ether");
         console.log(`Trading Account  has ${balanceUSDT} USDT`);
     } catch (error) {

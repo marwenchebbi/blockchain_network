@@ -27,7 +27,7 @@ async function logBalanceOfAllAccounts(contract) {
             console.log(`Account ${i}: ${accounts[i]} has ${balancePRX} PRX`);
             
         }
-        const balance = await contract.methods.balanceOf("0x4aE117BE91c9eF312dE8f852032c1Cd3562cF328").call();
+        const balance = await contract.methods.balanceOf("0xA577977ebcD5A63323777d50A1a467CD19d28312").call();
         const balancePRX = web3.utils.fromWei(balance, "ether");
         console.log(`Trading Account  has ${balancePRX} PRX`);
     } catch (error) {

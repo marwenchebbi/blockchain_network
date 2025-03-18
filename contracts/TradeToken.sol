@@ -6,99 +6,109 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract TradeToken {
     IERC20 public proxym;
     IERC20 public usdt;
-    uint256 public rate = 100; // Initial rate: 100 PRX = 1 USDT (1 PRX = 0.01 USDT)
 
     constructor(address _proxym, address _usdt) {
         proxym = IERC20(_proxym);
         usdt = IERC20(_usdt);
     }
 
-    // Buy tokens with USDT using CPMM logic
-    function buyTokens(address from, uint256 usdtAmount) public {
-        uint256 currentUSDT = usdt.balanceOf(address(this));
-        uint256 currentPRX = proxym.balanceOf(address(this));
-        require(currentUSDT > 0 && currentPRX > 0, "Pool is empty");
+    // Buy PRX tokens with USDT
+    function buyTokens(uint256 usdtAmount) external {
+        require(usdtAmount > 0, "Amount must be greater than 0");
+
+        uint256 usdtBalance = usdt.balanceOf(address(this));
+        uint256 prxBalance = proxym.balanceOf(address(this));
+        require(usdtBalance > 0 && prxBalance > 0, "Pool is empty");
 
         // Calculate PRX to send based on constant product: k = PRX * USDT
-        uint256 k = currentPRX * currentUSDT;
-        uint256 newUSDT = currentUSDT + usdtAmount;
-        uint256 newPRX = k / newUSDT; // New PRX balance after trade
-        uint256 tokenAmount = currentPRX - newPRX; // PRX sent to user
+        uint256 k = usdtBalance * prxBalance;
+        uint256 newUsdtBalance = usdtBalance + usdtAmount;
+        uint256 newPrxBalance = k / newUsdtBalance;
+        uint256 prxToSend = prxBalance - newPrxBalance;
 
-        require(tokenAmount > 0, "Insufficient output amount");
-        require(proxym.balanceOf(address(this)) >= tokenAmount, "Not enough tokens available");
+        require(prxToSend > 0, "Insufficient output amount");
 
         // Transfer USDT from the user to the contract
-        usdt.transferFrom(from, address(this), usdtAmount);
+        require(
+            usdt.transferFrom(msg.sender, address(this), usdtAmount),
+            "USDT transfer failed"
+        );
 
         // Transfer PRX tokens to the user
-        proxym.transfer(from, tokenAmount);
-
-        // Update rate to reflect new price (PRX per USDT)
-        updateExchangeRateForBuy();
+        require(proxym.transfer(msg.sender, prxToSend), "PRX transfer failed");
     }
 
-    // Sell tokens for USDT using CPMM logic
-    function sellTokens(address from, uint256 tokenAmount) public {
-        uint256 currentUSDT = usdt.balanceOf(address(this));
-        uint256 currentPRX = proxym.balanceOf(address(this));
-        require(currentUSDT > 0 && currentPRX > 0, "Pool is empty");
+    // Sell PRX tokens for USDT
+    function sellTokens(uint256 prxAmount) external {
+        require(prxAmount > 0, "Amount must be greater than 0");
+
+        uint256 usdtBalance = usdt.balanceOf(address(this));
+        uint256 prxBalance = proxym.balanceOf(address(this));
+        require(usdtBalance > 0 && prxBalance > 0, "Pool is empty");
 
         // Calculate USDT to send based on constant product: k = PRX * USDT
-        uint256 k = currentPRX * currentUSDT;
-        uint256 newPRX = currentPRX + tokenAmount;
-        uint256 newUSDT = k / newPRX; // New USDT balance after trade
-        uint256 usdtAmount = currentUSDT - newUSDT; // USDT sent to user
+        uint256 k = usdtBalance * prxBalance;
+        uint256 newPrxBalance = prxBalance + prxAmount;
+        uint256 newUsdtBalance = k / newPrxBalance;
+        uint256 usdtToSend = usdtBalance - newUsdtBalance;
 
-        require(usdtAmount > 0, "Insufficient output amount");
-        require(usdt.balanceOf(address(this)) >= usdtAmount, "Not enough USDT available");
+        require(usdtToSend > 0, "Insufficient output amount");
 
         // Transfer PRX tokens from the user to the contract
-        proxym.transferFrom(from, address(this), tokenAmount);
+        require(
+            proxym.transferFrom(msg.sender, address(this), prxAmount),
+            "PRX transfer failed"
+        );
 
         // Transfer USDT to the user
-        usdt.transfer(from, usdtAmount);
-
-        // Update rate to reflect new price (PRX per USDT)
-        updateExchangeRateForSell();
+        require(usdt.transfer(msg.sender, usdtToSend), "USDT transfer failed");
     }
 
-    // Getter for Exchange rate
-    function getRate() public view returns (uint256) {
-        return rate; // PRX per USDT
+    // Get the current price of PRX in USDT (with decimals considered)
+    function getPrice() external view returns (uint256) {
+        uint256 usdtBalance = usdt.balanceOf(address(this));
+        uint256 prxBalance = proxym.balanceOf(address(this));
+        require(usdtBalance > 0 && prxBalance > 0, "Pool is empty");
+
+        // Price = USDT / PRX (adjusted for decimals if needed)
+        return (usdtBalance * 1e18) / prxBalance; // Adjust for 18 decimals
     }
 
-    // Setter for the Exchange Rate
-    function setRate(uint256 newRate) public {
-        rate = newRate;
+    // Helper function to get pool balances
+    function getPoolBalances()
+        external
+        view
+        returns (uint256 prxBalance, uint256 usdtBalance)
+    {
+        return (proxym.balanceOf(address(this)), usdt.balanceOf(address(this)));
     }
 
     // Transfer PRX tokens to another address
-    function transferToken(address from, address to, uint256 tokenAmount) public {
-        require(proxym.balanceOf(from) >= tokenAmount, "Not enough tokens to transfer");
+    function transferToken(
+        address from,
+        address to,
+        uint256 tokenAmount
+    ) public {
+        require(
+            proxym.balanceOf(from) >= tokenAmount,
+            "Not enough tokens to transfer"
+        );
         bool success = proxym.transferFrom(from, to, tokenAmount);
         require(success, "Token transfer failed");
     }
 
-    function transferUSDT(address from, address to, uint256 tokenAmount) public {
-        require(usdt.balanceOf(from) >= tokenAmount, "Not enough tokens to transfer");
+    // Transfer USDT to another address
+    function transferUSDT(
+        address from,
+        address to,
+        uint256 tokenAmount
+    ) public {
+        require(
+            usdt.balanceOf(from) >= tokenAmount,
+            "Not enough tokens to transfer"
+        );
         bool success = usdt.transferFrom(from, to, tokenAmount);
         require(success, "Token transfer failed");
     }
-
-    // Update rate after a buy (called internally)
-    function updateExchangeRateForBuy() internal {
-        uint256 currentUSDT = usdt.balanceOf(address(this));
-        uint256 currentPRX = proxym.balanceOf(address(this));
-        require(currentUSDT > 0 && currentPRX > 0, "Pool is empty");
-        rate = currentPRX / currentUSDT; // New rate: PRX per USDT
-    }
-
-    // Update rate after a sell (called internally)
-    function updateExchangeRateForSell() internal {
-        uint256 currentUSDT = usdt.balanceOf(address(this));
-        uint256 currentPRX = proxym.balanceOf(address(this));
-        require(currentUSDT > 0 && currentPRX > 0, "Pool is empty");
-        rate = currentPRX / currentUSDT; // New rate: PRX per USDT
-    }
 }
+

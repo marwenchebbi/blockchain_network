@@ -1,60 +1,35 @@
-const Web3 = require("web3").default; // Use standard Web3 1.x
-const fs = require("fs");
-const path = require("path");
+
+const { web3, proxymContract, tradeContract, usdtContract, PROXYM_CONTRACT_ADDRESS, TRADE_CONTRACT_ADDRESS, USDT_CONTRACT_ADDRESS } = require("./Config/contracts");
 
 
-const web3 = new Web3("http://127.0.0.1:7545");
 
-// Load Proxym contract 
-const ProxymContractPath = path.join(__dirname, "build/contracts/Proxym.json");
-const ProxymContractAddress = "0x3b7494967E48e46fC7c4747B14c3cC607b44aEd3"; // Replace with the deployed address from Truffle
-const ProxymcontractJSON = JSON.parse(fs.readFileSync(ProxymContractPath, "utf8"));
-const ProxymcontractABI = ProxymcontractJSON.abi;
+async function getPrice(contract) {
+    try {
+        // Fetch the price from the contract
+        const exchangeRate = await contract.methods.getPrice().call();
 
-// Load tarding contract 
-const TradeContractPath = path.join(__dirname, "build/contracts/TradeToken.json");
-const TradeContractAddress = "0x4aE117BE91c9eF312dE8f852032c1Cd3562cF328"; // Replace with the deployed address from Truffle
-const TradecontractJSON = JSON.parse(fs.readFileSync(TradeContractPath, "utf8"));
-const TradecontractABI = TradecontractJSON.abi;
+        // Convert it to a human-readable format
+        const formattedRate = Number(exchangeRate) / 1e18; // Convert from wei-like precision
 
-// Load USDT  contract 
-const UsdtContractPath = path.join(__dirname, "build/contracts/MockUSDT.json");
-const UsdtContractAddress = "0x3Cf665A1dc7e6C73690808F17BcDaefAF140877B"; // Replace with the deployed address from Truffle
-const UsdtcontractJSON = JSON.parse(fs.readFileSync(UsdtContractPath, "utf8"));
-const UsdtcontractABI = UsdtcontractJSON.abi;
+        // Log the exchange rate
+        console.log(`The exchange rate is: ${formattedRate}`);
 
-//create instances of the contracts
-const contract = new web3.eth.Contract(TradecontractABI, TradeContractAddress);
-const proxymContract = new web3.eth.Contract(ProxymcontractABI, ProxymContractAddress);
-const usdtContract = new web3.eth.Contract(UsdtcontractABI, UsdtContractAddress)
-
-global.rate = 0;
-
-
-async function getExchangeRate(contract) {
-    const newRate = await contract.methods.getRate().call();
-    console.log(`the exchange rate is : ${newRate}`)
-    rate=newRate;
+        return formattedRate;
+    } catch (error) {
+        console.error("Error fetching exchange rate:", error.message);
+        throw error;
+    }
 }
 
-async function setExchangeRate(newRate,contract) {
-     await contract.methods
-    .setRate(newRate)
-    .send({from: "0x13823F18e24e93Cd46D5b3B2486ddb5A7F360ea7"});
 
-    console.log('Price updated successfully !!!')
-}
+
+
 
 async function transferToken(from, to, amount) {
     try {
         const weiAmount = web3.utils.toWei(amount, "ether");
-        // Step 1: Approve the contract to spend tokens
-        approveTransaction(from,proxymContract,TradeContractAddress,weiAmount);
-        // Step 2: Call transferToken function
-        await contract.methods
-            .transferToken(from, to, weiAmount)
-            .send({ from });
-
+        await approveTransaction(from, proxymContract, TRADE_CONTRACT_ADDRESS, weiAmount);
+        await tradeContract.methods.transferToken(from, to, weiAmount).send({ from });
         console.log(`✅ Transfer successful from ${from} to ${to}`);
     } catch (error) {
         console.error("❌ Transfer failed:", error);
@@ -64,96 +39,110 @@ async function transferToken(from, to, amount) {
 async function transferUSDT(from, to, amount) {
     try {
         const weiAmount = web3.utils.toWei(amount, "ether");
-        // Step 1: Approve the contract to spend tokens
-        approveTransaction(from,usdtContract,TradeContractAddress,weiAmount);
-        // Step 2: Call transferToken function
-        await contract.methods
-            .transferUSDT(from, to, weiAmount)
-            .send({ from });
-
+        await approveTransaction(from, usdtContract, TRADE_CONTRACT_ADDRESS, weiAmount);
+        await tradeContract.methods.transferUSDT(from, to, weiAmount).send({ from });
         console.log(`✅ Transfer successful from ${from} to ${to}`);
     } catch (error) {
         console.error("❌ Transfer failed:", error);
     }
 }
 
-
-
-
-
-// implement the logic for buying tokens
-async function buyPRX(from, amount) {
+async function buyTokens(from, usdtAmount) {
     try {
-        const weiAmount = web3.utils.toWei(amount, "ether");
-        // Step 1: Approve the contracts(Proxym and USDT) to spend tokens
-        approveTransaction(from,usdtContract,TradeContractAddress,weiAmount);
-        approveTransaction(from,proxymContract,TradeContractAddress,weiAmount*rate);//i need to change the 100 by the exchange rate if it is dynamic !!!
-
-        // Step 2: Call transferToken function
-        await contract.methods
-            .buyTokens(from,weiAmount)
-            .send({ from });
-
-        console.log(`✅ Buy successful from ${from} `);
+        const weiAmount = web3.utils.toWei(usdtAmount, "ether");
+        await approveTransaction(from, usdtContract, TRADE_CONTRACT_ADDRESS, weiAmount);
+        await tradeContract.methods.buyTokens(weiAmount).send({ from });
+        console.log(`✅ Buy successful from ${from}`);
     } catch (error) {
         console.error("❌ Buy failed:", error);
     }
 }
-async function sellPRX(from, amount) {
+
+async function sellTokens(from, prxAmount) {
     try {
-        const weiAmount = web3.utils.toWei(amount, "ether");
-        // Step 1: Approve the contracts(Proxym and USDT) to spend tokens
-        approveTransaction(from,usdtContract,TradeContractAddress,weiAmount/rate);
-        approveTransaction(from,proxymContract,TradeContractAddress,weiAmount);//i need to change the 100 by the exchange rate if it is dynamic !!!
-
-        // Step 2: Call sellTokens function
-        await contract.methods
-            .sellTokens(from,weiAmount)
-            .send({ from });
-
-        console.log(`✅ Sell successful from ${from} `);
+        const weiAmount = web3.utils.toWei(prxAmount, "ether");
+        await approveTransaction(from, proxymContract, TRADE_CONTRACT_ADDRESS, weiAmount);
+        await tradeContract.methods.sellTokens(weiAmount).send({ from });
+        console.log(`✅ Sell successful from ${from}`);
     } catch (error) {
         console.error("❌ Sell failed:", error);
     }
 }
 
 
+async function approveTransaction(from, contract, addressToApprove, weiAmount) {
+    try {
+        await contract.methods.approve(addressToApprove, weiAmount).send({ from });
+        console.log("✅ Approval successful");
+    } catch (error) {
+        console.error("❌ Approval failed:", error);
+    }
+}
+
+// create new account 
+async function createAccount(password) {
+    try {
+        // Check if web3 is available
+        if (typeof web3 !== 'undefined') {
+            const accounts = await web3.eth.personal.newAccount(password);
+            console.log('Account created successfully:', accounts);
+            return accounts; // Return the new account address
+        } else {
+            console.log('error accessing the blockchain server');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error creating account:', error);
+        return null;
+    }
+}
+
+
+//get the account details
+async function getAccountDetails(account) {
+    try {
+      // Check if web3 is available
+      if (typeof web3 !== 'undefined') {
+        // Fetch account balance
+        const balance = await proxymContract.methods.balanceOf(account).call();
+        console.log(`Balance of account ${account}:`, web3.utils.fromWei(balance, 'ether'), 'ETH');
+  
+        // You can fetch other details like transactions using web3 or a blockchain explorer API.
+        // For example, getting transaction count:
+        const transactionCount = await web3.eth.getTransactionCount(account);
+        console.log(`Transaction count of account ${account}:`, transactionCount);
+  
+        // Return all details as an object
+        return {
+          balance: web3.utils.fromWei(balance, 'ether'), // Convert balance to ETH
+          transactionCount: transactionCount
+        };
+      } else {
+        console.log('Web3 is not available. Please install a Web3 provider like MetaMask.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching account details:', error);
+      return null;
+    }
+  }
+  
+
+
 
 
 
 async function main() {
-    //transferToken("0x13823F18e24e93Cd46D5b3B2486ddb5A7F360ea7","0x4aE117BE91c9eF312dE8f852032c1Cd3562cF328","100000");
-    //transferUSDT("0x13823F18e24e93Cd46D5b3B2486ddb5A7F360ea7","0x4aE117BE91c9eF312dE8f852032c1Cd3562cF328","1000");
-
-    //await buyPRX("0x13823F18e24e93Cd46D5b3B2486ddb5A7F360ea7","100");//buying 1500 tokens
-    //setExchangeRate(150,contract);
-    await getExchangeRate(contract);
-    //sellPRX("0x13823F18e24e93Cd46D5b3B2486ddb5A7F360ea7","1500");//selling 1500 tokens 
+    //await transferUSDT("0x13823F18e24e93Cd46D5b3B2486ddb5A7F360ea7",TRADE_CONTRACT_ADDRESS,"1000");
+    //await transferToken("0x13823F18e24e93Cd46D5b3B2486ddb5A7F360ea7",TRADE_CONTRACT_ADDRESS,"100000") // i need to fix it i have to unlock the account for some minutes
+    //await getAccountDetails("0x5FA9081C46C64DDA31bae32d33879Ba9E9DFa1B7");
+   //await buyPRX("0x13823F18e24e93Cd46D5b3B2486ddb5A7F360ea7","100");
+   //await sellTokens("0x13823F18e24e93Cd46D5b3B2486ddb5A7F360ea7","10000")
+    await getPrice(tradeContract);
+    await createAccount('0808');
     
 }
 
+
 main().catch(console.error);
 
-
-
-
-
-
-
-
-
-async function approveTransaction(from,contract, AddressToApprove,weiAmount) {
-
-    try {
-        // Approve the contract to spend tokens
-        await contract.methods
-            .approve(AddressToApprove, weiAmount)
-            .send({ from });
-        console.log("✅ Approval successful");
-    }
-    catch (error) {
-        console.error("❌ Transfer failed:", error);
-
-
-    }
-}
